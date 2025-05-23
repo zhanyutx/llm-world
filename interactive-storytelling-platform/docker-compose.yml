@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: ./frontend # Specifies the directory for the frontend Dockerfile
+      dockerfile: Dockerfile # Specifies the name of the Dockerfile
+    ports:
+      - "3000:80" # Maps port 80 from the container (Nginx) to port 3000 on the host
+    # Volumes for source code are removed to use the code COPYing mechanism within the Dockerfile,
+    # aligning with a production-like build. For development with hot-reloading,
+    # a separate docker-compose.dev.yml might be used.
+
+  backend:
+    build:
+      context: ./backend # Specifies the directory for the backend Dockerfile
+      dockerfile: Dockerfile # Specifies the name of the Dockerfile
+    ports:
+      - "8000:8000" # Maps port 8000 from the container (Node.js app) to port 8000 on the host
+    env_file:
+      - .env # Loads environment variables from a .env file in the project root
+             # Crucial for API keys like OPENAI_API_KEY for the backend service.
+    # Volumes for source code are removed, similar to the frontend service,
+    # to rely on the Dockerfile's build process.
+
+  # Placeholder for Redis (optional, for session management or caching)
+  # redis:
+  #   image: "redis:alpine"
+  #   ports:
+  #     - "6379:6379"
+
+  # Placeholder for PostgreSQL (optional, for persistent storage)
+  # postgres:
+  #   image: "postgres:latest"
+  #   environment:
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: story_db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data: # Only if using PostgreSQL (named volume for persistence)
