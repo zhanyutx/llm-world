@@ -3,34 +3,14 @@ import json
 import sys
 from openai import OpenAI
 
-def get_openai_response(prompt: str, api_key: str):
-    """
-    Interacts with the OpenAI API to get a response for the given prompt.
-    """
-    try:
-        client = OpenAI(api_key=api_key)
-        completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",  # Or another suitable model
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-        )
-        if completion.choices and len(completion.choices) > 0:
-            return completion.choices[0].message.content
-        else:
-            return "Error: No response from OpenAI."
-    except Exception as e:
-        return f"Error interacting with OpenAI: {str(e)}"
-
-# Placeholder for XAI or other providers in the future
-# def get_xai_response(prompt: str, api_key: str, base_url: str = "https://api.x.ai/v1"):
+# def get_openai_response(prompt: str, api_key: str):
 #     """
-#     Interacts with the XAI API to get a response. (Placeholder)
+#     Interacts with the OpenAI API to get a response for the given prompt.
 #     """
 #     try:
-#         client = OpenAI(api_key=api_key, base_url=base_url) # Note: OpenAI SDK used for XAI as per user feedback
+#         client = OpenAI(api_key=api_key)
 #         completion = client.chat.completions.create(
-#             model="your-xai-model", # Replace with actual XAI model
+#             model="gpt-3.5-turbo",  # Or another suitable model
 #             messages=[
 #                 {"role": "user", "content": prompt}
 #             ]
@@ -38,9 +18,29 @@ def get_openai_response(prompt: str, api_key: str):
 #         if completion.choices and len(completion.choices) > 0:
 #             return completion.choices[0].message.content
 #         else:
-#             return "Error: No response from XAI."
+#             return "Error: No response from OpenAI."
 #     except Exception as e:
-#         return f"Error interacting with XAI: {str(e)}"
+#         return f"Error interacting with OpenAI: {str(e)}"
+
+# Placeholder for XAI or other providers in the future
+def get_openai_response(prompt: str, api_key: str, base_url: str = "https://api.x.ai/v1"):
+    """
+    Interacts with the XAI API to get a response. (Placeholder)
+    """
+    try:
+        client = OpenAI(api_key=api_key, base_url=base_url) # Note: OpenAI SDK used for XAI as per user feedback
+        completion = client.chat.completions.create(
+            model="grok-3", # Replace with actual XAI model
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+        if completion.choices and len(completion.choices) > 0:
+            return completion.choices[0].message.content
+        else:
+            return "Error: No response from XAI."
+    except Exception as e:
+        return f"Error interacting with XAI: {str(e)}"
 
 if __name__ == "__main__":
     response_data = {}

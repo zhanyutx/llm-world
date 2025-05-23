@@ -2,26 +2,25 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile # You'll need to create this Dockerfile
+      context: ./frontend # Specifies the directory for the frontend Dockerfile
+      dockerfile: Dockerfile # Specifies the name of the Dockerfile
     ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app/frontend
-      - /app/frontend/node_modules # Don't mount node_modules from host
+      - "3000:80" # Maps port 80 from the container (Nginx) to port 3000 on the host
+    # Volumes for source code are removed to use the code COPYing mechanism within the Dockerfile,
+    # aligning with a production-like build. For development with hot-reloading,
+    # a separate docker-compose.dev.yml might be used.
 
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile # You'll need to create this Dockerfile
+      context: ./backend # Specifies the directory for the backend Dockerfile
+      dockerfile: Dockerfile # Specifies the name of the Dockerfile
     ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/app/backend
-      - /app/backend/node_modules # Don't mount node_modules from host
-    environment:
-      # Add any necessary environment variables
-      # OPENAI_API_KEY: your_api_key
+      - "8000:8000" # Maps port 8000 from the container (Node.js app) to port 8000 on the host
+    env_file:
+      - .env # Loads environment variables from a .env file in the project root
+             # Crucial for API keys like OPENAI_API_KEY for the backend service.
+    # Volumes for source code are removed, similar to the frontend service,
+    # to rely on the Dockerfile's build process.
 
   # Placeholder for Redis (optional, for session management or caching)
   # redis:
@@ -42,4 +41,4 @@ services:
   #     - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  postgres_data: # Only if using PostgreSQL
+  postgres_data: # Only if using PostgreSQL (named volume for persistence)
