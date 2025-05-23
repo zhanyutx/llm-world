@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile # You'll need to create this Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules # Don't mount node_modules from host
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile # You'll need to create this Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - /app/backend/node_modules # Don't mount node_modules from host
+    environment:
+      # Add any necessary environment variables
+      # OPENAI_API_KEY: your_api_key
+
+  # Placeholder for Redis (optional, for session management or caching)
+  # redis:
+  #   image: "redis:alpine"
+  #   ports:
+  #     - "6379:6379"
+
+  # Placeholder for PostgreSQL (optional, for persistent storage)
+  # postgres:
+  #   image: "postgres:latest"
+  #   environment:
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: story_db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data: # Only if using PostgreSQL

@@ -1,0 +1,4 @@
+# Placeholder for Python dependencies
+# Example:
+# langchain
+openai>=1.0.0 # Added openai library for LLM interaction
